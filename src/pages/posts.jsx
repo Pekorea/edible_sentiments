@@ -2,12 +2,15 @@ import { useState } from "react";
 import Navbar from "../components/Navsydbar";
 import { Toaster,toast } from "react-hot-toast";
 
+import { collection,getDoc } from "firebase/firestore";
+
 function Posts(){
    const [media, setMedia] = useState('')
    const [toggle2, setToggle2] = useState(false)
    const [toggle1, setToggle1] = useState(false)
-   const [caption, setCaption] = useState(false)
+   const [caption, setCaption] = useState('')
 
+  console.log(caption)
    function handleChange(e) {
     console.log(e.target.files);
     try {
@@ -30,19 +33,18 @@ return(
         <Toaster/>
     <Navbar/>
     <div className="postsCont">
-       
             <form className="postsform"> 
             <h1 className="postshead">Create Post</h1>
             <div className="pcont1">
-                <textarea onChange={(e)=> setCaption(e.target.value)} value={caption} required maxLength={50} className="caption" type="text" placeholder="Enter Caption.."></textarea>
+                <input onChange={(e)=> setCaption(e.target.value)} value={caption} required maxLength={50} className="caption" type="text" placeholder="Enter Caption.."></input>
                 <input 
                 className={toggle1 ? "nopro" : 'yespro'}
                 accept="image/png,image/jpeg"
                 onChange={handleChange} type="file">
                 </input>
-                <img src={toggle2 ? media : "/fimage1.jpg"}
+                <img src={toggle2 ? media : "/whiteB.png"}
                 className="foodpic"
-                alt="Profile Picture"
+                alt="post picture"
                 ></img>
                 <div className="pcont2">
                 <button type="button" onClick={cancelPost} className="cancpbtn">Cancel</button>

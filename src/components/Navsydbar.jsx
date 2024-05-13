@@ -24,10 +24,20 @@ function Navbar(){
         <div className="genCont">
             <div className="barsCont">
                 <div className="navB"> 
-                <li onClick={onClick}>Menu</li>
-                <li>Edible Sentiments</li>
-                <li><Link to='/posts'>Post</Link></li>
-                    
+                <li className="hnav" onClick={onClick}>Menu</li>
+                <li className="hnav"><Link to='/home'>Edible Sentiments</Link></li>
+                <li className="hnav"><Link to='/posts'>Post</Link></li>
+
+                <div className="navsideb">
+                <h3><Link to='/home'>Edible Sentiments</Link></h3>
+                <li><Link to='/account'>Account </Link></li>
+                <li><Link to='/posts'>Posts</Link></li>
+                <li><Link to='/history'>History</Link></li>
+                <li><Link to='/'>Logout</Link></li>
+                </div>
+
+                
+                   
                 </div>
                 <div ref={sidebarRef} className={!toggle?"sideB":"sidesB"}>
                 
