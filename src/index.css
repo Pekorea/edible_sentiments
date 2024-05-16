@@ -197,21 +197,23 @@ h2{
   justify-content: center;
 }
 .barsCont{
+  display: flex;
+  justify-content: center;
   border-bottom-left-radius: 25%;
   border-bottom-right-radius: 25%;
   height:50px;
   padding:5px;
   font-size: 1.45rem;
-  color:white;
-  justify-content: space-between;
-  
+  color:rgb(255, 255, 255);
+  backdrop-filter: blur(10px);
+  background-color: rgba(60, 12, 67, 0.516);
+  width:100%;
 }
 
 .navB{
   list-style: none;
   display: flex;
   gap:2rem;
-
 }
 .hnav{
   display: none;
@@ -252,6 +254,7 @@ h2{
  display: flex;
  gap:2.9rem;
  font-size: 1.24rem;
+ justify-content: center;
  
 }
 .navsideb li{
@@ -259,6 +262,7 @@ h2{
 }
 .navsideb h3{
   margin-right: 8.7rem;
+  font-size: 1.36rem;
 }
 .navsideb li:hover{
   cursor: pointer;
@@ -290,10 +294,20 @@ h2{
 
 }
 .acctCont{
-  display: flex;
-  justify-content: center;
   height: 100dvh;
   align-items: center;
+  background-image: url("darkW.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+
+}
+.aconts{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:80dvh;
 }
 .personalinfo{
   display: flex;
@@ -301,27 +315,29 @@ h2{
   align-items: center;
   justify-content:flex-start;
   padding:1.3rem;
-  height: 78%;
-  width:65%;
-  background-color: rgb(92, 60, 2);
-  filter:opacity(97%);
+  height: fit-content;
+  width:30rem;
+  background-color: rgb(33, 9, 33);
+  filter:opacity(84%);
   color:white;
-  gap:2rem;
-  border-radius: .35rem;
-  
+  gap:1.4rem;
+  border-radius: 0.85rem;
+ 
 }
 .personalinfo input{
-  text-align: center;
   color:white;
   background-color: rgb(50, 50, 50);
   outline: none;
   height:2.4rem;
+  width:100%;
+  padding:1.2rem;
+  
 }
 .personalinfo div{
   padding:0.25rem;
   color:white;
-  width:100%;
-  background-color: rgb(50, 50, 50);
+  width:80%;
+ 
 }
 .homebody{
   background-image: url("darkW.jpg");
@@ -331,10 +347,15 @@ h2{
   background-attachment: fixed;
   
 }
-.passdiv label{
-  
-
-}
+.contInts div{
+  width:85%;
+ }
+ .userType{
+  background-color: green;
+  width: 60%;
+  padding:0.5rem;
+  display: flex;
+ }
 .package{
   color:white;
   display: flex;
@@ -384,7 +405,7 @@ h2{
 }
 .postsform{
   margin-top: 10rem;
-  background-color: rgb(18, 18, 18);
+  background-color: rgb(33, 9, 33);
   width:30rem;
   padding:1.5rem;
   display: flex;
@@ -401,16 +422,25 @@ h2{
   justify-content: center;
   position: relative;
 }
+.nofoodpic{
+  display: none;
+}
 .pbody{
-  background-color: rgb(48, 48, 48);
+  background-image: url("darkW.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
   height:100dvh;
+  overflow: auto;
 }
 .postsCont{
   display: flex;
   align-items: center;
   justify-content: center; 
-  height: 69dvh;
+  height: fit-content;
   width:100%;
+  
 }
 .postshead{
   font-size: 1rem;
@@ -454,6 +484,14 @@ h2{
 }
 .uploadpbtn{
   background-color: rgb(16, 120, 16);
+}
+.histCont{
+  background-image: url("darkW.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 100dvh;
 }
 }
 @media (max-width:760px) {
@@ -553,11 +591,11 @@ h2{
   }
   .fplink:hover{
     filter: brightness(70%);
-    transition: .3 ease-in;
+    transition: 0.5 ease-in;
   }
   .signupL:hover{
     filter: brightness(70%);
-    transition: .3 ease-in;
+    transition: 0.45 ease-in;
   }
   
   .contInp{
@@ -608,7 +646,7 @@ h2{
     width:39%;
     height:35px;
     cursor: pointer;
-    transition: .29s;
+    transition: 0.285s ease-out;
     
   }
   .logsub:hover{
@@ -643,6 +681,11 @@ h2{
   .loginL{
     position: absolute;
     bottom:1rem;
+    border-bottom: 1px solid white;
+    transition: 0.35s ease-in;
+  }
+  .loginL:hover{
+    filter: brightness(70%);
   }
   .genCont{
     display: flex;
@@ -656,7 +699,7 @@ h2{
     font-size: 1.45rem;
     color:white;
     justify-content: space-between;
-    
+    position:fixed;
   }
   .navsideb{
    display: none;
@@ -664,7 +707,7 @@ h2{
   }
   .navB{
     list-style: none;
-    font-size: 1.24rem;
+    font-size: 1.50rem;
     display: flex;
     gap:3.9rem;
   }
@@ -681,7 +724,7 @@ h2{
     font-size: 1rem;
     height: 50dvh;
     padding-top:20px;
-    z-index: 999;
+    z-index: 1000;
     color: white;
     cursor: pointer;
     top:0px;
@@ -727,10 +770,20 @@ h2{
   
   }
   .acctCont{
-    display: flex;
-    justify-content: center;
     height: 100dvh;
     align-items: center;
+    background-image: url("darkW.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+  
+  }
+  .aconts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:80dvh;
   }
   .personalinfo{
     display: flex;
@@ -738,27 +791,28 @@ h2{
     align-items: center;
     justify-content:flex-start;
     padding:1.3rem;
-    height: 78%;
-    width:65%;
-    background-color: rgb(92, 60, 2);
-    filter:opacity(97%);
+    height: fit-content;
+    width:23.4rem;
+    background-color: rgb(33, 9, 33);
+    filter:opacity(84%);
     color:white;
-    gap:2rem;
-    border-radius: .35rem;
-    
+    gap:1.4rem;
+    border-radius: 0.85rem;
+   
   }
   .personalinfo input{
-    text-align: center;
     color:white;
     background-color: rgb(50, 50, 50);
     outline: none;
     height:2.4rem;
+    width:100%;
+    padding:0.8rem;
   }
   .personalinfo div{
     padding:0.25rem;
     color:white;
-    width:100%;
-    background-color: rgb(50, 50, 50);
+    width:80%;
+  
   }
   .homebody{
     background-image: url("darkW.jpg");
@@ -767,10 +821,16 @@ h2{
     background-size: cover;
     background-attachment: fixed;
   }
-  .passdiv label{
-    
-  
-  }
+ .contInts div{
+  width:85%;
+ }
+ .userType{
+  background-color: green;
+  width: 60%;
+  padding:0.5rem;
+  display: flex;
+ 
+ }
   .package{
     color:white;
     display: flex;
@@ -815,14 +875,13 @@ h2{
     transition: 0.4 ease-in;
   }
   .chaveninfobtn:hover{
-    filter: brightness(150%);
+    filter: brightness(80%);
     background-color: rgb(43, 43, 43);
   }
   .postsform{
-    margin-top: 14rem;
-    height: auto;
-    background-color: rgb(48, 48, 48);
-    width:27rem;
+    height: fit-content;
+    background-color: rgb(33, 9, 33);
+    width:23rem;
     padding:1.5rem;
     display: flex;
     flex-direction: column;
@@ -840,19 +899,25 @@ h2{
     position: relative;
   }
   .pbody{
-    background-color: rgb(18, 18, 18);
+    background-image: url("darkW.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
     height:100dvh;
+    overflow: auto;
   }
   .postsCont{
     display: flex;
     align-items: center;
     justify-content: center; 
-    height: 69dvh;
+    height: fit-content;
     width:100%;
+    
   }
   .postshead{
     font-size: 1rem;
-   margin-bottom: 1rem;
+    margin-bottom: 1rem;
   }
   .pcont2{
     display: flex;
@@ -862,6 +927,9 @@ h2{
     width:fit-content;
     margin-top:0.7rem;
     height: fit-content;
+  }
+  .nofoodpic{
+    display: none;
   }
   .pcont2 button{
     margin-top: 1.4rem;
@@ -887,9 +955,30 @@ h2{
     justify-content: center;
   }
   .cancpbtn{
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(172, 24, 24);
   }
   .uploadpbtn{
-    background-color: rgb(16, 120, 16);
+    background-color: rgb(12, 71, 12);
   }
+  .histCont{
+    background-image: url("darkW.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100dvh;
+  }
+  .post1{
+    display: flex;
+    flex-direction: column;
+    padding:1.5rem;
+    width: fit-content;
+    background-color: rgb(33, 9, 33);
+    filter: opacity(85%);
+    border-radius: 2rem;
+  }
+  .post1 h3{
+    
+  }
+
 }

@@ -3,7 +3,7 @@ import Navbar from "../components/Navsydbar";
 
 function Home(){
    const [postsdey, setPostsdey] = useState(false)
-   const [toggle, setToggle] = useState(true)
+   const [toggle, setToggle] = useState(false)
 
    const checkPosts=()=>{
     setToggle(false)
@@ -19,20 +19,18 @@ function Home(){
                 </div> 
                 :
                 <div className="packageDEY">
-                <div className="postsform"> 
-                <div className="pcont1">
-                <p value='Okay' required maxLength={50} className="caption" type="text" placeholder="Enter Caption.."></p>
-                <input 
-                className=''
-                accept="image/png,image/jpeg">
-                </input>
+                <div className="post1"> 
+                <h1 className="postcaption">Okay</h1>
                 <img src={"/whiteB.png"}
                 className="foodpic"
-                alt="post picture"
+                alt="post media"
                 ></img>
+                <div className="postsbtndiv">
+                    <button type="button">Comments</button>
                 </div>
                 </div>
-                </div>}
+                </div>
+               }
             </div>
         </div>
     )

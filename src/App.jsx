@@ -7,6 +7,7 @@ import Navbar from './components/Navsydbar'
 import Home from './pages/home'
 import Account from './pages/Account'
 import Posts from './pages/posts'
+import History from './pages/history'
 
 function App() {
   return(

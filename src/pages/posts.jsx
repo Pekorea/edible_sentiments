@@ -43,7 +43,7 @@ return(
                 onChange={handleChange} type="file">
                 </input>
                 <img src={toggle2 ? media : "/whiteB.png"}
-                className="foodpic"
+                className={toggle2 ?"foodpic":"nofoodpic"}
                 alt="post picture"
                 ></img>
                 <div className="pcont2">

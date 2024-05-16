@@ -70,7 +70,7 @@ function Signup(){
         </div>
         <div>
         <label>Enter Email</label>
-        <input required value={email} onChange={handleEmailChange} className='input' type='text' ></input>
+        <input type='email' required value={email} onChange={handleEmailChange} className='input' ></input>
         {emailError && <h2 className="error">{emailError}</h2>}
         </div>
         <div>
@@ -78,11 +78,17 @@ function Signup(){
         <input required value={passKey} onChange={handlePassKeyChange} className='input' type='password'></input>
         {passKeyError && <h2 className="error">{passKeyError}</h2>}
         </div>
-        <div>
-        <label>Confirm PassKey</label>
-        <input required value={compassKey} onChange={handlecomPassKeyChange} className='input' type='password'></input>
-        {compassKeyError && <h2 className="error">{compassKeyError}</h2>}
-        </div>
+        <span className="userType">
+          <div>
+          <label >Vendor</label>
+          <input type='checkbox' required></input>
+          </div>
+          <div>
+          <label>Customer</label>
+          <input type='checkbox' required></input>
+          </div>
+          
+        </span>
         </div>
         <button className='regsub' type='submit'>Register</button>
         

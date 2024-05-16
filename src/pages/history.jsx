@@ -4,8 +4,8 @@ import Navbar from "../components/Navsydbar";
 function History(){
 return(
     <>
-    <Navbar/>
     <div className="histCont">
+    <Navbar/>
 
     </div>
     </>

@@ -31,7 +31,7 @@ function Login() {
         <div className='contInp'>
         <div className='phonediv'>
         <label>Email</label>
-        <input value={email} onChange={changeEmail} required autoComplete="off" className='input' type='text' ></input>
+        <input value={email} onChange={changeEmail} required autoComplete="off" className='input' type='email' ></input>
         </div>
         <div className="passdiv">
         <label>PassKey</label>
