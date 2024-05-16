@@ -20,13 +20,16 @@ function Home(){
                 :
                 <div className="packageDEY">
                 <div className="post1"> 
-                <h1 className="postcaption">Okay</h1>
-                <img src={"/whiteB.png"}
+                <h2> NAMEOFVENDOR</h2>
+                <span>
+                <h1 className="postcaption">alright Sushi - #500</h1>
+                </span>
+                <img src={"/fimage1.jpg"}
                 className="foodpic"
                 alt="post media"
                 ></img>
-                <div className="postsbtndiv">
-                    <button type="button">Comments</button>
+                <div className="commentsbtndiv">
+                    <button type="button">View Comments(3)</button>
                 </div>
                 </div>
                 </div>

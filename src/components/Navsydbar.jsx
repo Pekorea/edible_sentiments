@@ -20,6 +20,26 @@ function Navbar(){
     event.stopPropagation();
     setToggle(!toggle)
     }
+  const [windowSize, setWindowSize] = useState({
+      width: window.innerWidth,
+      height: window.innerHeight,
+     });
+   const handleResize = () => {
+     setWindowSize({
+     width: window.innerWidth,
+      height: window.innerHeight,
+      });
+    
+        // Check if the sidebar should be automatically closed based on screen size
+        if (window.innerWidth > 760) {
+          setToggle(false);
+        }
+      };
+    
+      useEffect(() => {
+        window.addEventListener('resize', handleResize); // Add resize event listener
+        return () => window.removeEventListener('resize', handleResize); // Clean up event listener on component unmount
+    }, []);
     return(
         <div className="genCont">
             <div className="barsCont">
