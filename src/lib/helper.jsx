@@ -1,4 +1,4 @@
-import { db } from "./firebase";
+//import { db } from "./firebase";
 import { useState, useEffect } from "react";
 import {
   query,
@@ -29,7 +29,7 @@ export async function addUser(user, name) {
   } catch (e) {
     console.log(e);
   }
-}
+}/*
 
 export async function AddNote(note, userid) {
   try {

@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import { useState } from "react";
 import {Toaster,toast} from 'react-hot-toast'
+//import { error } from "../lib/error";
+//import AuthProvided from "../lib/auth";
 
 function Signup(){
   const [email, setEmail] = useState('');
@@ -11,7 +13,7 @@ function Signup(){
   const [emailError, setEmailError] = useState('');
   const [passKeyError, setPassKeyError] = useState('');
   const [NameError, setNameError] = useState('');
-
+  const nav = useNavigate()
   const handleEmailChange = (event) => {
     const value = event.target.value;
     const targetV = '@'
@@ -47,11 +49,16 @@ function Signup(){
       setNameError('');
     }
   };
+  const [userType, setUserType] = useState('');
+
+  const handleUserTypeChange = (event) => {
+    setUserType(event.target.value);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add form submission logic
-    toast("Registered", { duration: 1500, icon: "👌😎" });
+    toast(`Registered as a ${userType}`, { duration: 1500, icon: "👌😎" });
+    nav('/home')
   };
     return(
     <div className='Ocont'>
@@ -75,18 +82,44 @@ function Signup(){
         </div>
         <div>
         <label>Enter PassKey</label>
-        <input required value={passKey} onChange={handlePassKeyChange} className='input' type='password'></input>
+        <input required value={passKey} minLength={6} onChange={handlePassKeyChange} className='input' type='password'></input>
         {passKeyError && <h2 className="error">{passKeyError}</h2>}
         </div>
+        
         <span className="userType">
+          <label>Select your user-Type</label>
+          <div className="userTypeselection">
           <div>
-          <label >Vendor</label>
-          <input type='checkbox' required></input>
+          <label>
+          <input
+            type="radio"
+            required
+            name="userType"
+            value="customer"
+            checked={userType === 'customer'}
+            onChange={handleUserTypeChange}
+          />
+          Customer
+        </label>
+        </div>
+        
+        <div>
+          <label>
+          <input
+            type="radio"
+            required
+            name="userType"
+            value="vendor"
+            checked={userType === 'vendor'}
+            onChange={handleUserTypeChange}
+          />
+          Vendor
+        </label>
+        </div>
           </div>
-          <div>
-          <label>Customer</label>
-          <input type='checkbox' required></input>
-          </div>
+          
+        
+
           
         </span>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/*import { useState, useEffect } from "react";
 import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -6,9 +6,9 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { addUser } from "./helper";
+//import { addUser } from "./helper";
 
-/*
+
 export default function AuthProvided() {
   const [user, setUser] = useState("");
 
@@ -60,7 +60,8 @@ export default function AuthProvided() {
     userId: user,
     // aname: name,
     signIn,
-    siginUp,
+    signUp,
     signOutF,
   };
-}*/
+}
+*/
