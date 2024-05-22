@@ -35,8 +35,9 @@ return(
     <div className="postsCont">
             <form className="postsform"> 
             <h1 className="postshead">Create Post</h1>
+            <button type="button" onClick={cancelPost} className="cancpbtn">X</button>
             <div className="pcont1">
-                <input onChange={(e)=> setCaption(e.target.value)} value={caption} required maxLength={50} className="caption" type="text" placeholder="Enter Caption.."></input>
+                <textarea onChange={(e)=> setCaption(e.target.value)} value={caption} required maxLength={50} className="caption" type="text" placeholder="Enter Caption.."></textarea>
                 <input 
                 className={toggle1 ? "nopro" : 'yespro'}
                 accept="image/png,image/jpeg"
@@ -47,7 +48,6 @@ return(
                 alt="post picture"
                 ></img>
                 <div className="pcont2">
-                <button type="button" onClick={cancelPost} className="cancpbtn">Cancel</button>
                 <button type='button' className="uploadpbtn">Upload</button>
                 </div>
                 </div>

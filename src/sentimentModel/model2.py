@@ -22,7 +22,7 @@ def get_mood(input_text: str, *, threshold: float) -> Mood:
         return Mood('Neutral😑', sentiment)
 
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
+CORS(app)  
 
 @app.route('/analyze', methods=['POST'])
 def analyze():

@@ -1,26 +1,32 @@
-from textblob import TextBlob
-from dataclasses import dataclass
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from transformers import pipeline
 
-@dataclass
-class Mood:
-    emoji: str
-    sentiment: float
+sentiment_pipeline = pipeline("sentiment-analysis")
 
-def get_mood(input_text: str, *, threshold: float) -> Mood:
-    sentiment: float = TextBlob(input_text).sentiment.polarity
+app = Flask(__name__)
+CORS(app)
 
-    friendly_threshold: float = threshold
-    hostile_threshold: float = -threshold
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    data = request.json
+    text = data.get('text')
+    if not text:
+        return jsonify({'error': 'No text provided'}), 400
 
-    if sentiment >= friendly_threshold:
-        return Mood('😊', sentiment)
-    elif sentiment <= hostile_threshold:
-        return Mood('😡', sentiment)
+    result = sentiment_pipeline(text)
+    sentiment = result[0]['label']
+    score = result[0]['score']
+
+    # Convert sentiment label to an emoji
+    if sentiment == 'POSITIVE':
+        emoji = '😊'
+    elif sentiment == 'NEGATIVE':
+        emoji = '😡'
     else:
-        return Mood('😑', sentiment)
+        emoji = '😑'
+
+    return jsonify(emoji=emoji, sentiment=score)
 
 if __name__ == '__main__':
-    while True:
-        text: str = input('Text: ')
-        mood: Mood = get_mood(text, threshold=0.3)
-        print(f'{mood.emoji} ({mood.sentiment})')
+    app.run(debug=True)

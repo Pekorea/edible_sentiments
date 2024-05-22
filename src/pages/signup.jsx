@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/header";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {Toaster,toast} from 'react-hot-toast'
-//import { error } from "../lib/error";
+import { addUser } from "../lib/helper";
+import AuthProvided from "../lib/auth";
+import { error } from "../lib/error";
 //import AuthProvided from "../lib/auth";
 
 function Signup(){
@@ -10,10 +12,19 @@ function Signup(){
   const [passKey, setPassKey] = useState('');
   const [compassKey, setcomPassKey] = useState('');
   const [Name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passKeyError, setPassKeyError] = useState('');
   const [NameError, setNameError] = useState('');
+  const { signUp, userId } = AuthProvided();
   const nav = useNavigate()
+
+  useEffect(() => {
+    if (userId) {
+      nav("/home");
+    }
+  }, [nav, userId]);
+
   const handleEmailChange = (event) => {
     const value = event.target.value;
     const targetV = '@'
@@ -55,11 +66,28 @@ function Signup(){
     setUserType(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    toast(`Registered as a ${userType}`, { duration: 1500, icon: "👌😎" });
-    nav('/home')
+    if (Name.length > 10) {
+      toast("Your Name is too long", { duration: 2000, icon: "❗❌" });
+    } else {
+      setLoading(true);
+      try {
+      await signUp(email, passKey, Name, userType);
+      toast(`Registered as a ${userType}`, { duration: 1500, icon: "👌😎" });
+      setLoading(false)
+      setTimeout(() => {
+        nav('/home');
+      }, 1500);
+    } catch (e) {
+      setLoading(false)
+      const errorMessage = error(e.code);
+      toast(errorMessage, { duration: 2000, icon: "❌❌" });
+      console.error('error signing user: ', e);
+    }
+  }
   };
+  
     return(
     <div className='Ocont'>
       <Toaster/>
@@ -123,7 +151,9 @@ function Signup(){
           
         </span>
         </div>
-        <button className='regsub' type='submit'>Register</button>
+        <button className='regsub' type='submit' >
+        {loading ? "Loading" : "Register"}
+        </button>
         
         <Link className="loginL" to='/'>Login Page</Link>
         </form>

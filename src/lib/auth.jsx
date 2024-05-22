@@ -1,4 +1,4 @@
-/*import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -6,13 +6,13 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-//import { addUser } from "./helper";
+import { addUser } from "./helper";
 
 
 export default function AuthProvided() {
   const [user, setUser] = useState("");
 
-  const signUp = async (email, passkey, name) => {
+  const signUp = async (email, passkey, name,userType) => {
     try {
       const userInfo = await createUserWithEmailAndPassword(
         auth,
@@ -20,7 +20,8 @@ export default function AuthProvided() {
         passkey
       );
       setUser(userInfo.user.uid);
-      await addUser(userInfo.user.uid, name);
+      console.log(user)
+      await addUser(user, userType,name);
     } catch (e) {
       throw e;
     }
@@ -58,10 +59,8 @@ export default function AuthProvided() {
 
   return {
     userId: user,
-    // aname: name,
     signIn,
     signUp,
     signOutF,
   };
 }
-*/

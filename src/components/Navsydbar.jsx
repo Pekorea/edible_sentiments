@@ -1,9 +1,12 @@
-import { useState,useRef,useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState,useRef,useEffect} from "react";
+import { Link,useNavigate } from "react-router-dom";
+import AuthProvided from "../lib/auth";
 function Navbar(){
     const [toggle, setToggle] = useState(false);
     const sidebarRef = useRef(null);
 
+    const{userId, signOutF} = AuthProvided();
+    const nav = useNavigate();
     useEffect(() => {
         function handleClickOutside(event) {
           if (toggle && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -52,8 +55,11 @@ function Navbar(){
                 <h3><Link to='/home'>Edible Sentiments</Link></h3>
                 <li><Link to='/account'>Account </Link></li>
                 <li><Link to='/posts'>Posts</Link></li>
-                <li><Link to='/history'>History</Link></li>
-                <li><Link to='/'>Logout</Link></li>
+                <li><Link onClick={() => {
+                signOutF().then(() => {
+                  nav("/");
+                });
+              }} to='/'>Logout</Link></li>
                 </div>
 
                 
@@ -67,8 +73,11 @@ function Navbar(){
                 </div>
                 <li><Link to='/account'>Account </Link></li>
                 <li><Link to='/posts'>Posts</Link></li>
-                <li><Link to='/history'>History</Link></li>
-                <li><Link to='/'>Logout</Link></li>
+                <li ><Link onClick={() => {
+                signOutF().then(() => {
+                  nav("/");
+                });}}
+                 to='/'>Logout</Link></li>
                 
                 </div>
             </div>
