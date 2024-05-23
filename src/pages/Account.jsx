@@ -1,7 +1,42 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Navbar from "../components/Navsydbar";
+import AuthProvided from "../lib/auth";
+import { getNameandUT } from "../lib/helper";
 
 function Account(){
+    const{userId}=AuthProvided();
+    const [userName, setUserName] = useState('');
+  const [userType, setUserType] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userId) return null;
+
+      try {
+        setLoading(true);
+        const userData = await getNameandUT(userId);
+        if (userData) {
+          setUserName(userData.userName);
+          setUserType(userData.userType);
+          console.log(userName)
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+
+
 return(
     <>
     <div className="acctCont">
@@ -17,15 +52,12 @@ return(
         </span>
    <div className="nameDiv">
     <label>Name: </label>
-    <input type='text' className="namefield" required></input>
+    <input defaultValue={userName} type='text' className="namefield" required></input>
     </div>
-    <div className="numberDiv">
-    <label>Email: </label>
-    <input className="numberfield" required type='text'></input>
-    </div>
-    <div className="passkeyDiv">
-    <label>Passkey: </label>
-    <input type="password" className="passkeyfield" required></input>
+    
+    <div className="userTypeDiv">
+    <label>UserType: </label>
+    <input defaultValue={userType} type="text" className='userTypefield' required></input>
    </div>
    <span>
     <button type="button" className="chaveninfobtn">Modify Passkey</button>

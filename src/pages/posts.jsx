@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Navbar from "../components/Navsydbar";
 import { Toaster,toast } from "react-hot-toast";
-
+import { storage, firestore } from '../lib/firebase';
 import { collection,getDoc } from "firebase/firestore";
 
 function Posts(){
-   const [media, setMedia] = useState('')
+   const [media, setMedia] = useState(null)
    const [toggle2, setToggle2] = useState(false)
    const [toggle1, setToggle1] = useState(false)
    const [caption, setCaption] = useState('')
@@ -28,6 +28,40 @@ function Posts(){
     setToggle1(false)
     setToggle2(false)
   }
+
+
+  const handleUpload = () => {
+    if (media) {
+      const uploadTask = storage.ref(`media/${media.name}`).put(media);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Optional: track the upload progress
+        },
+        (error) => {
+          console.error('Error uploading file:', error);
+        },
+        () => {
+          // Get the download URL after upload completes
+          storage
+            .ref('media')
+            .child(media.name)
+            .getDownloadURL()
+            .then((url) => {
+              // Save the download URL to Firestore
+              firestore.collection('media').add({
+                url,
+                name: media.name,
+              });
+              setMedia(null); // Reset the image state
+            });
+        }
+      );
+    }
+  };
+
+
+
 return(
     <div className="pbody">
         <Toaster/>
@@ -48,7 +82,7 @@ return(
                 alt="post picture"
                 ></img>
                 <div className="pcont2">
-                <button type='button' className="uploadpbtn">Upload</button>
+                <button type='button' onClick={handleUpload} className="uploadpbtn">Upload</button>
                 </div>
                 </div>
             </form>

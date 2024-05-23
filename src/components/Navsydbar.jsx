@@ -1,11 +1,13 @@
 import { useState,useRef,useEffect} from "react";
 import { Link,useNavigate } from "react-router-dom";
 import AuthProvided from "../lib/auth";
+import { getNameandUT } from '../lib/helper';
+
 function Navbar(){
     const [toggle, setToggle] = useState(false);
     const sidebarRef = useRef(null);
-
     const{userId, signOutF} = AuthProvided();
+    console.log(userId)
     const nav = useNavigate();
     useEffect(() => {
         function handleClickOutside(event) {
@@ -43,6 +45,8 @@ function Navbar(){
         window.addEventListener('resize', handleResize); // Add resize event listener
         return () => window.removeEventListener('resize', handleResize); // Clean up event listener on component unmount
     }, []);
+
+    
     return(
         <div className="genCont">
             <div className="barsCont">
@@ -50,7 +54,14 @@ function Navbar(){
                 <li className="hnav" onClick={onClick}>Menu</li>
                 <li className="hnav"><Link to='/home'>Edible Sentiments</Link></li>
                 <li className="hnav"><Link to='/posts'>Post</Link></li>
-
+             {/*   {userId ? (
+          <div className="userdcont1">
+           <p>Name:{userName}</p>
+           <p>UserType:{userType}</p>
+          </div>
+        ) : (
+          <p>No user logged in</p>
+        )}*/}
                 <div className="navsideb">
                 <h3><Link to='/home'>Edible Sentiments</Link></h3>
                 <li><Link to='/account'>Account </Link></li>
@@ -60,6 +71,7 @@ function Navbar(){
                   nav("/");
                 });
               }} to='/'>Logout</Link></li>
+             
                 </div>
 
                 

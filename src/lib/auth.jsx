@@ -12,17 +12,14 @@ import { addUser } from "./helper";
 export default function AuthProvided() {
   const [user, setUser] = useState("");
 
-  const signUp = async (email, passkey, name,userType) => {
+  const signUp = async (email, passkey, name, userType) => {
     try {
-      const userInfo = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        passkey
-      );
+      const userInfo = await createUserWithEmailAndPassword(auth, email, passkey);
       setUser(userInfo.user.uid);
-      console.log(user)
-      await addUser(user, userType,name);
+      console.log(userInfo.user.uid); // Log the correct user ID
+      await addUser(userInfo.user.uid, userType, name); // Pass the UID directly
     } catch (e) {
+      console.error(e); // Changed to console.error for better error logging
       throw e;
     }
   };

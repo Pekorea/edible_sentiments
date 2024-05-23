@@ -30,7 +30,7 @@ const SentimentAnalyzer = () => {
             <button onClick={analyzeSentiment}>Analyze</button>
             {result && (
                 <div>
-                    <p>Emoji: {result.sentimental}</p>
+                    <p>Emoji: {result.emoji}</p>
                     <p>Sentiment Score: {result.sentiment}</p>
                 </div>
             )}

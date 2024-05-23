@@ -15,40 +15,58 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db,storage } from "./firebase";
 
-export async function addUser(user,userType, name) {
-  try {
-    const newUser = await setDoc(doc(db, "Users", user), {
-      userId: user,
+export async function addUser(userId, userType, name) { // Changed parameter name to userId for clarity
+  try { 
+    console.log(userId); 
+    const newUser = await addDoc(collection(db, "Users"), { // Use collection reference
       Name: name,
-      created_at:new Date(),
-      userType:userType,
+      created_at: new Date(),
+      userId: userId, // Use the passed userId directly
+      userType: userType,
     });
     return newUser;
   } catch (e) {
-    console.log(e);
+    console.error(e); 
+  }
+}
+export async function CreatePost(userId, caption, media ) { // Changed parameter name to userId for clarity
+  try {
+    console.log(userId);
+    const newUser = await addDoc(collection(db, "posts"), { // Use collection reference
+      numcomments:0,
+      created_at: new Date(),
+      userId: userId, // Use the passed userId directly
+      sentiment:'',
+      caption:caption
+
+    });
+    return newUser;
+  } catch (e) {
+    console.error(e); // Changed to console.error for better error logging
   }
 }
 
-export async function getName(userId) {
-  const [loading,setLoading] = useState(false)
+export async function getNameandUT(userId) {
   if (!userId) return null; // Return null for no user ID
   try {
-    setLoading(true)
     const collectionRef = collection(db, "Users");
     const querySnapshot = await getDocs(
       query(collectionRef, where("userId", "==", userId))
     );
-    let userName = null
+    let userName = null;
+    let userType = null;
     querySnapshot.forEach((doc) => {
-      // Assuming there's a "name" field in the user's document
+      
       const userData = doc.data();
-      console.log(userData);
-      userName = userData.name; // Set userName if the user is found
+//      console.log(userData);
+      userName = userData.Name;
+      userType = userData.userType;
+      //console.log(userName)
     });
 
-    return userName; // Return the user's name (or null if not found)
+    return { userName, userType }; // Return the user's name and userType (or null if not found)
   } catch (e) {
     console.error("Error getting name: ", e);
     throw new Error(e);

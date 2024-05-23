@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Navbar from "../components/Navsydbar";
 import SentimentAnalyzer from "./sentimenttest";
 import AuthProvided from "../lib/auth";
+import {toast,Toaster} from "react-hot-toast";
+
 function Home(){
+  const{userId} = AuthProvided();
+  console.log(userId)
+  
+  const [userName, setUserName] = useState('');
+  const [userType, setUserType] = useState('');
+  const [loading, setLoading] = useState(true);
+
   
    const [postsdey, setPostsdey] = useState(false)
    const [toggle, setToggle] = useState(false)
@@ -18,6 +27,7 @@ function Home(){
    }
     return(
         < div className='homebody'>
+          <Toaster/>
             <Navbar/>
                 {toggle ? 
                <SentimentAnalyzer/> 
