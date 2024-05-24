@@ -31,18 +31,18 @@ export async function addUser(userId, userType, name) { // Changed parameter nam
     console.error(e); 
   }
 }
-export async function CreatePost(userId, caption, media ) { // Changed parameter name to userId for clarity
+export async function CreatePost(userId,overallSent, caption, mediaFile ) { // Changed parameter name to userId for clarity
   try {
     console.log(userId);
-    const newUser = await addDoc(collection(db, "posts"), { // Use collection reference
+    const newPost = await addDoc(collection(db, "posts"), { // Use collection reference
       numcomments:0,
       created_at: new Date(),
-      userId: userId, // Use the passed userId directly
-      sentiment:'',
-      caption:caption
-
+      userId: userId, 
+      sentiment:overallSent,
+      caption:caption,
+      picture:mediaFile,
     });
-    return newUser;
+    return newPost;
   } catch (e) {
     console.error(e); // Changed to console.error for better error logging
   }
@@ -71,6 +71,30 @@ export async function getNameandUT(userId) {
     console.error("Error getting name: ", e);
     throw new Error(e);
   }
+}
+  export async function getPosts(userId) {
+    if (!userId) return null; // Return null for no user ID
+    try {
+      const collectionRef = collection(db, "posts");
+      const querySnapshot = await getDocs(
+        query(collectionRef, where("userId", "==", userId))
+      );
+      let pictureurl = null;
+      let caption = null;
+      querySnapshot.forEach((doc) => {
+        
+        const userData = doc.data();
+        console.log(userData);
+        caption = userData.caption;
+        pictureurl = userData.picture;
+        //console.log(userName)
+      });
+  
+      return [userData]; // Return the user's name and userType (or null if not found)
+    } catch (e) {
+      console.error("Error getting name: ", e);
+      throw new Error(e);
+    }
 }
 /*
 export const signUpUser = async (email, password, name, userType) => {
