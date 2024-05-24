@@ -25,7 +25,7 @@ function Login() {
     setLoading(true);
     try {
       const userId = await signIn(email, passKey);
-      toast("Successfully logged in", { duration: 3000, icon: "✔" });
+      toast.success("Successfully logged in", { duration: 3000, icon: "✔" });
       setLoading(false);
       setTimeout(() => {
         nav(`/home`);
@@ -33,7 +33,7 @@ function Login() {
     } catch (e) {
       const errorMessage = error(e.code);
       setLoading(false);
-      toast(errorMessage, { duration: 2000, icon: "❌❌" });
+      toast.error(errorMessage, { duration: 2000, icon: "❌❌" });
     }
   }
     return (

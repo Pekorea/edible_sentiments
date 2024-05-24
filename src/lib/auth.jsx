@@ -16,7 +16,7 @@ export default function AuthProvided() {
     try {
       const userInfo = await createUserWithEmailAndPassword(auth, email, passkey);
       setUser(userInfo.user.uid);
-      console.log(userInfo.user.uid); // Log the correct user ID
+      console.log(userInfo.user.uid); 
       await addUser(userInfo.user.uid, userType, name); // Pass the UID directly
     } catch (e) {
       console.error(e); // Changed to console.error for better error logging
