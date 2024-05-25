@@ -5,18 +5,17 @@ import AuthProvided from "../lib/auth";
 import { AiOutlineSend } from "react-icons/ai";
 import Loading from "../components/loadingscn";
 import { toast, Toaster } from "react-hot-toast";
-import { fetchVendorPosts, getNameandUT } from "../lib/helper";
+import { fetchVendorPosts,deleteComment, deletePost, CommenT, fetchComments } from "../lib/helper"; // Adjust imports
 import { CiTrash } from "react-icons/ci";
-import { deletePost } from "../lib/helper";
 
 function Home() {
   const { userId } = AuthProvided();
   console.log(userId);
 
-  const [isloading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [accomments, setAccomments] = useState('');
+  const [comments, setComments] = useState({});
+  const [commentsInput, setCommentsInput] = useState({});
   const [commentsVisible, setCommentsVisible] = useState({});
 
   useEffect(() => {
@@ -27,6 +26,7 @@ function Home() {
         }
         const postsData = await fetchVendorPosts(userId);
         setPosts(postsData);
+        console.log(posts)
         setLoading(false);
       } catch (error) {
         toast.error('Error fetching posts: ' + error.message);
@@ -37,13 +37,56 @@ function Home() {
     getPosts();
   }, [userId]);
 
-  if (isloading) return <Loading />;
+  useEffect(() => {
+    const fetchAllComments = async () => {
+      try {
+        const allComments = await Promise.all(posts.map(post => fetchComments(post.id)));
+        const commentsMap = posts.reduce((acc, post, index) => {
+          acc[post.id] = allComments[index];
+          return acc;
+        }, {});
+        setComments(commentsMap);
+      } catch (error) {
+        toast.error('Error fetching comments: ' + error.message);
+      }
+    };
 
-  const toggleComments = (postId) => {
+    if (posts.length > 0) {
+      fetchAllComments();
+    }
+  }, [posts]);
+
+  const toggleComments = async (postId) => {
+    const isVisible = commentsVisible[postId];
     setCommentsVisible((prevState) => ({
       ...prevState,
-      [postId]: !prevState[postId],
+      [postId]: !isVisible,
     }));
+
+    if (!isVisible && !comments[postId]) {
+      try {
+        const fetchedComments = await fetchComments(postId);
+        setComments((prevState) => ({
+          ...prevState,
+          [postId]: fetchedComments,
+        }));
+      } catch (error) {
+        toast.error('Error fetching comments: ' + error.message);
+      }
+    }
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      await deleteComment(postId, commentId);
+      setComments(prevState => ({
+        ...prevState,
+        [postId]: prevState[postId].filter(comment => comment.id !== commentId)
+      }));
+      toast.success('Comment deleted successfully!');
+    } catch (error) {
+      toast.error('Error deleting comment: ' + error.message);
+    }
   };
   const handleDelete = async (postId, imageUrl) => {
     try {
@@ -66,25 +109,51 @@ function Home() {
       hour12: false
     }).format(date);
   };
-  const handlecomchange = (e)=>{
-    setAccomments(e.target.value)
-  }
-  const handlecomsub =(e)=>{
-    
-  }
+
+  const handlecomchange = (e, postId) => {
+    setCommentsInput((prevState) => ({
+      ...prevState,
+      [postId]: e.target.value,
+    }));
+  };
+
+  const handlecomsub = async (VendorId, PostId, comment) => {
+    try {
+      await CommenT(VendorId, PostId, comment);
+      toast.success('Comment added successfully!');
+      setCommentsInput((prevState) => ({
+        ...prevState,
+        [PostId]: '',
+      }));
+
+      // Re-fetch comments after adding a new one
+      const updatedComments = await fetchComments(PostId);
+      setComments((prevState) => ({
+        ...prevState,
+        [PostId]: updatedComments,
+      }));
+    } catch (e) {
+      console.error('error', e);
+      toast.error('Error adding comment: ' + e.message);
+    }
+  };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className='homebody'>
       <Toaster />
       <Navbar />
       {posts.length === 0 ? (
-        <SentimentAnalyzer />
+        <div className="sentAZ">
+          <SentimentAnalyzer />
+        </div>
       ) : (
         posts.map((post) => (
           <div key={post.id} className="packageDEY">
             <div className="post1">
               <div className="postheader">
-                <h2 className="post1h2">NAMEOFVENDOR</h2>
+                <h2 className="post1h2">{post.name}</h2>
                 <CiTrash onClick={() => handleDelete(post.id, post.pictureurl)} className="deleteicon"/>
               </div>
               <div className="postcaption">{post.caption}</div>
@@ -108,23 +177,37 @@ function Home() {
                       <p className='commentsh3'>Comments {` (${post.numcomments})`}</p>
                       <button type="button" className="close-btn" onClick={() => toggleComments(post.id)}>X</button>
                     </div>
-                    {comments.length ===0?(
+                    {comments[post.id]?.length === 0 ? (
                       <div className="nocom">
                         <h1>No comments for this post yet</h1>
                       </div>
-                   
-                    ):(
+                    ) : (
                       <div className="yescom">
-                         <h2 className="commentName">Commentor</h2>
-                          <p className="comments">Comment 1</p>
+                        {comments[post.id]?.map((comment) => (
+                          <div className="commentsCont" key={comment.id}>
+                              <CiTrash className="deleteicons" onClick={() => handleDeleteComment(post.id, comment.id)}/>
+                              <h2 className="commentName">{comment.Name}</h2>
+                              <p className="comments">{comment.text}</p>
+                           
+                            
+                          </div>
+                        ))}
                       </div>
-                  )}
+                    )}
                   </div>
                   <div className="comments-containertextdiv">
-                  <input maxLength={150} value={accomments} onChange={handlecomchange} type="text" placeholder="Type a comment.." required></input>
-                  <AiOutlineSend className="sendicon"/>
+                    <input
+                      maxLength={150}
+                      value={commentsInput[post.id] || ''}
+                      onChange={(e) => handlecomchange(e, post.id)}
+                      type="text"
+                      placeholder="Type a comment.."
+                      required
+                    />
+                    <div onClick={() => handlecomsub(userId, post.id, commentsInput[post.id])} className="sendiconDiv">
+                      <AiOutlineSend className="sendicon" />
+                    </div>
                   </div>
-                 
                 </div>
               )}
             </div>

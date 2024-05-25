@@ -602,14 +602,24 @@ h2{
   background: rgba(48, 2, 47, 0.973);
   height:fit-content;
   display:flex;
+}
+.sendiconDiv{
   position: relative;
+  width:13%;
+  background-color: rgb(61, 21, 61);
+  cursor: pointer;
+}
+.sendiconDiv:hover{
+  transition: 0.4s;
+
+  filter: brightness(80%);
 }
 .sendicon{
   position: absolute;
-  right: 1.4rem;
+  right: 1.1rem;
   top:1.2rem;
-  color: rgb(155, 36, 155);
-  cursor: pointer;
+  color: rgb(248, 246, 248);
+  
 }
 .comments-container input{
   width: 87%;
@@ -654,7 +664,7 @@ h2{
   color: rgb(174, 171, 171);
 }
 .commentName{
-  color: rgb(66, 61, 61);
+  color: rgb(162, 155, 155);
   font-size: 1rem;
 }
 .comments{
@@ -678,6 +688,84 @@ h2{
 
 .close-btn:hover {
   filter: brightness(170%);
+}
+
+.deleteicon{
+  position: absolute;
+  right:0.32rem;
+  cursor: pointer;
+}
+.postheader{
+  display: flex;
+  position: relative;
+}
+.close-btn {
+  padding: 0.6rem;
+  position: absolute;
+  top:-1rem;
+  right:0.7rem;
+  font-size: 1.2rem;
+  width:1.9rem;
+  cursor: pointer;
+  transition: 0.24s ease-out;
+  border-radius: 2rem;
+  margin-top: 1rem;
+  color: #fff;
+  border: none;
+}
+
+.close-btn:hover {
+  filter: brightness(170%);
+}
+.sentAZ{
+  display: flex;
+  color: white;
+  align-items: center;
+  justify-self: center;
+  height: 100dvh;
+}
+.prepsentText{
+  background-color: rgb(48, 16, 44);
+  outline:none;
+  padding:0.2rem;
+}
+.ccont{
+ width:100%;
+}
+.commentsCont{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 50%;
+  gap:0.17rem;
+  height: fit-content;
+  padding:0.34rem;
+  background-color: rgb(91, 19, 91);
+  border-radius: 1rem;
+  position: relative;
+
+}
+.comnametext{
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
+.yescom{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding:0.3rem;
+  height:90%;
+  overflow: auto;
+  gap:1rem;
+  position: relative;
+  background-color: black;
+
+}
+.deleteicons{
+  position: absolute;
+  top:0.6rem;
+  right:0.4rem;
 }
 }
 @media (max-width:760px) {
@@ -1220,6 +1308,8 @@ h2{
     display: flex;
     justify-content: center;
     width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
   
   .commentsbtndiv button {
@@ -1246,6 +1336,7 @@ h2{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     transition: right 0.5s ease-in-out;
     z-index: 2; 
   }
@@ -1254,6 +1345,55 @@ h2{
     right: 0;
   }
   
+  .comments-containertextdiv{
+    width:100%;
+    background: rgba(48, 2, 47, 0.973);
+    height:fit-content;
+    display:flex;
+  }
+  .sendiconDiv{
+    position: relative;
+    width:13%;
+    background-color: rgb(61, 21, 61);
+    cursor: pointer;
+  }
+  .sendiconDiv:hover{
+    transition: 0.4s;
+  
+    filter: brightness(80%);
+  }
+  .sendicon{
+    position: absolute;
+    right: 1.1rem;
+    top:1.2rem;
+    color: rgb(248, 246, 248);
+    
+  }
+  .comments-container input{
+    width: 87%;
+    outline: none;
+    border: none;
+    padding: 1rem;
+    height: 100%;
+    background-color: transparent;
+  }
+  .comments-container.show {
+    right: 0;
+  }
+  
+  .nocom{
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+ 
+  .commentsbtndiv p{
+    color: rgb(186, 177, 177);
+    font-size: 0.68rem;
+    position: absolute;
+    bottom:0.4rem;
+  }
   .comments-content {
     background-color: rgb(33, 9, 33);
     position: relative;
@@ -1265,17 +1405,34 @@ h2{
     max-width: 500px;
     text-align: left;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-
+    overflow: auto;
+  
   }
   .comments-content div{
     display: flex;
     justify-content: center;
   }
   .commentsh3{
-    font-size: 1rem;
-    margin-bottom: 1.3rem;
+    margin-bottom: 0.7rem;
+    font-size: 1.3rem;
+    color: rgb(174, 171, 171);
   }
-  
+  .commentName{
+    color: rgb(66, 61, 61);
+    font-size: 1rem;
+  }
+  .comments{
+    font-size: 0.79rem;
+  }
+  .deleteicon{
+    position: absolute;
+    right:0.32rem;
+    cursor: pointer;
+  }
+  .postheader{
+    display: flex;
+    position: relative;
+  }
   .close-btn {
     padding: 0.6rem;
     position: absolute;
@@ -1294,5 +1451,54 @@ h2{
   .close-btn:hover {
     filter: brightness(170%);
   }
+  .sentAZ{
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-self: center;
+    height: 100dvh;
+  }
+  .prepsentText{
+    background-color: rgb(48, 16, 44);
+    outline:none;
+    padding:0.2rem;
+  }
+  .ccont{
+   width:100%;
+  }
+  .commentsCont{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    gap:0.17rem;
+    height: fit-content;
+    padding:0.34rem;
+    background-color: rgb(91, 19, 91);
+    border-radius: 1rem;
+    position: relative;
 
+  }
+  .comnametext{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+  }
+  .yescom{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding:0.3rem;
+    height:90%;
+    overflow: auto;
+    gap:1rem;
+    position: relative;
+    background-color: black;
+
+  }
+  .deleteicons{
+    position: absolute;
+    top:0.6rem;
+    right:0.4rem;
+  }
 }

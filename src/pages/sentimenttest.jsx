@@ -25,6 +25,7 @@ const SentimentAnalyzer = () => {
                 onChange={(e) => setText(e.target.value)}
                 rows="4"
                 cols="50"
+                className='prepsentText'
             />
             <br />
             <button onClick={analyzeSentiment}>Analyze</button>

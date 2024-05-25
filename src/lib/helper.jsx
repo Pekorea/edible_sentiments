@@ -14,6 +14,7 @@ import {
   where,
   onSnapshot,
   orderBy,
+  increment,
 } from "firebase/firestore";
 import { db,imgDb } from "./firebase";
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -47,10 +48,14 @@ export async function CreatePost(userId, overallSent, caption, mediaFile) {
     const querySnapshot = await getDocs(query(collectionRef, where("userId", "==", userId)));
 
     let userType = null;
+    let userName = null;
     querySnapshot.forEach((doc) => {
       const userData = doc.data();
       console.log(userData);
+      userName = userData.Name;
       userType = userData.userType;
+
+      console.log(userName)
     });
 
     if (userType !== 'vendor') {
@@ -80,6 +85,7 @@ export async function CreatePost(userId, overallSent, caption, mediaFile) {
       async () => {
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         await addDoc(collection(db, "POST"), {
+          name:userName,
           numcomments: 0,
           created_at: new Date(),
           userId: userId,
@@ -137,6 +143,7 @@ export async function CreatePost(userId, overallSent, caption, mediaFile) {
 */
 export async function fetchVendorPosts(vendorId) {
   try {
+    console.log(vendorId)
     const postsCollectionRef = collection(db, 'POST');
     const q = query(
       postsCollectionRef,
@@ -155,6 +162,111 @@ export async function fetchVendorPosts(vendorId) {
     throw error;
   }
 }
+
+export const deleteComment = async (postId, commentId) => {
+  try {
+    // Delete the comment document
+    await deleteDoc(doc(db, "POST", postId, "comments", commentId));
+
+    // Decrement the comment count on the post document
+    await updateDoc(doc(db, "POST", postId), {
+      numcomments: increment(-1)
+    });
+
+    console.log('Comment deleted and count updated successfully');
+    return true;
+  } catch (error) {
+    console.error("Error deleting comment: ", error);
+    return false;
+  }
+};
+
+export async function fetchPosts(Id) {
+  try {
+    console.log(Id)
+    const postsCollectionRef = collection(db, 'POST');
+    const q = query(
+      postsCollectionRef,
+      orderBy('created_at', 'desc')
+    );
+    const querySnapshot = await getDocs(q);
+    const posts = [];
+    querySnapshot.forEach((doc) => {
+      posts.push({ id: doc.id, ...doc.data() });
+    });
+    console.log(posts)
+    return posts;
+  } catch (error) {
+    console.error('Error fetching vendor posts:', error);
+    throw error;
+  }
+}
+
+export const CommenT= async (VendorId,PostId,comment)=>{
+  try{
+    if(!VendorId){
+      return console.error('You are not logged in')
+    }
+    console.log(VendorId)
+    console.log(PostId)
+    console.log(comment)
+    const collectionRef = collection(db, "Users");
+    const querySnapshot = await getDocs(
+      query(collectionRef, where("userId", "==", VendorId))
+    );
+    let userName = null;
+    let userType = null;
+    querySnapshot.forEach((doc) => {
+      
+      const userData = doc.data();
+      userName = userData.Name;
+      userType = userData.userType
+    });
+    if (!userName) {
+      console.error('User not found');
+      return;
+    }
+
+    const newComment = await addDoc(collection(db, "POST",PostId,"comments"), { // Use collection reference
+      Name: userName,
+      text:comment,
+      created_at: new Date(),
+      userId: VendorId,
+      usertype: userType
+    });
+    const changecomcount = await updateDoc(doc(db, "POST",PostId), { 
+      numcomments:increment(1)
+    });
+    return newComment;
+    
+    
+  }catch(e){
+    console.error('This error occured: ', e)
+  }
+}
+
+export const fetchComments = async (PostId) => {
+  try {
+    const commentsRef = collection(db, "POST", PostId, 'comments');
+    const commentsQuery = query(commentsRef, orderBy('created_at', 'asc'));
+    const querySnapshot = await getDocs(commentsQuery);
+
+    const comments = [];
+    querySnapshot.forEach((doc) => {
+      comments.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    console.log(comments)
+    return comments;
+
+
+  } catch (e) {
+    console.error('This error occurred: ', e);
+    return [];
+  }
+};
 
 export const deletePost = async (postId, imageUrl) => {
   try {

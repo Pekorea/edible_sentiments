@@ -2,6 +2,7 @@ import { useState,useEffect } from "react";
 import Navbar from "../components/Navsydbar";
 import AuthProvided from "../lib/auth";
 import { getNameandUT } from "../lib/helper";
+import Loading from "../components/loadingscn";
 
 function Account(){
     const{userId}=AuthProvided();
@@ -32,7 +33,7 @@ function Account(){
   }, [userId]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
 
@@ -52,12 +53,12 @@ return(
         </span>
    <div className="nameDiv">
     <label>Name: </label>
-    <input defaultValue={userName} type='text' className="namefield" required></input>
+    <input disabled defaultValue={userName} type='text' className="namefield" required></input>
     </div>
     
     <div className="userTypeDiv">
     <label>UserType: </label>
-    <input defaultValue={userType} type="text" className='userTypefield' required></input>
+    <input disabled defaultValue={userType} type="text" className='userTypefield' required></input>
    </div>
    <span>
     <button type="button" className="chaveninfobtn">Modify Passkey</button>
