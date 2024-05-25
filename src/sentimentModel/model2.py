@@ -13,7 +13,7 @@ model = AutoModelForSequenceClassification.from_pretrained("cardiffnlp/twitter-r
 
 # Function to analyze sentiment
 def analyze_sentiment(text):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
     outputs = model(**inputs)
     probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
     sentiment = torch.argmax(probs, dim=1).item()

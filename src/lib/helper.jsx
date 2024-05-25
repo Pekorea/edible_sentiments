@@ -202,7 +202,7 @@ export async function fetchPosts(Id) {
   }
 }
 
-export const CommenT= async (VendorId,PostId,comment)=>{
+export const Commens= async (VendorId,PostId,comment)=>{
   try{
     if(!VendorId){
       return console.error('You are not logged in')
@@ -244,6 +244,51 @@ export const CommenT= async (VendorId,PostId,comment)=>{
     console.error('This error occured: ', e)
   }
 }
+
+export const CommenT = async (VendorId, PostId, comment, sentiment, score) => {
+  try {
+    if (!VendorId) {
+      return console.error('You are not logged in');
+    }
+    console.log(VendorId);
+    console.log(PostId);
+    console.log(comment);
+    console.log(sentiment)
+
+    const collectionRef = collection(db, 'Users');
+    const querySnapshot = await getDocs(query(collectionRef, where('userId', '==', VendorId)));
+    let userName = null;
+    let userType = null;
+    querySnapshot.forEach((doc) => {
+      const userData = doc.data();
+      userName = userData.Name;
+      userType = userData.userType;
+    });
+    if (!userName) {
+      console.error('User not found');
+      return;
+    }
+
+    const newComment = await addDoc(collection(db, 'POST', PostId, 'comments'), {
+      Name: userName,
+      text: comment,
+      created_at: new Date(),
+      userId: VendorId,
+      usertype: userType,
+      sentiment: sentiment,
+      score: score,
+    });
+
+    await updateDoc(doc(db, 'POST', PostId), {
+      numcomments: increment(1),
+    });
+
+    return newComment;
+  } catch (e) {
+    console.error('This error occurred: ', e);
+  }
+};
+
 
 export const fetchComments = async (PostId) => {
   try {

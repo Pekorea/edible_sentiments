@@ -8,6 +8,9 @@ import { toast, Toaster } from "react-hot-toast";
 import { fetchVendorPosts,deleteComment, deletePost, CommenT, fetchComments } from "../lib/helper"; // Adjust imports
 import { CiTrash } from "react-icons/ci";
 
+const SENTIMENT_ANALYSIS_URL = 'http://127.0.0.1:5000/analyze_sentiment';
+
+
 function Home() {
   const { userId } = AuthProvided();
   console.log(userId);
@@ -117,21 +120,46 @@ function Home() {
     }));
   };
 
+  const analyzeSentiment = async (comment) => {
+    try {
+      const response = await fetch(SENTIMENT_ANALYSIS_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment }),
+      });
+      const data = await response.json();
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.error('Error analyzing sentiment:', error);
+      return null;
+    }
+  };
+
   const handlecomsub = async (VendorId, PostId, comment) => {
     try {
-      await CommenT(VendorId, PostId, comment);
-      toast.success('Comment added successfully!');
-      setCommentsInput((prevState) => ({
-        ...prevState,
-        [PostId]: '',
-      }));
+      const sentimentData = await analyzeSentiment(comment);
+      if (sentimentData) {
+        await CommenT(VendorId, PostId, comment, sentimentData.label, sentimentData.score);
+        toast.success('Comment added successfully!');
 
-      // Re-fetch comments after adding a new one
-      const updatedComments = await fetchComments(PostId);
-      setComments((prevState) => ({
-        ...prevState,
-        [PostId]: updatedComments,
-      }));
+        // Clear the comment input
+        setCommentsInput((prevState) => ({
+          ...prevState,
+          [PostId]: '',
+        }));
+
+        // Re-fetch comments after adding a new one
+        const updatedComments = await fetchComments(PostId);
+        setComments((prevState) => ({
+          ...prevState,
+          [PostId]: updatedComments,
+        }));
+      } else {
+        toast.error('Failed to analyze sentiment. Please try again.');
+      }
     } catch (e) {
       console.error('error', e);
       toast.error('Error adding comment: ' + e.message);
@@ -183,12 +211,13 @@ function Home() {
                       </div>
                     ) : (
                       <div className="yescom">
-                        {comments[post.id]?.map((comment) => (
+                        {comments[post.id] && comments[post.id].map((comment)=> (
                           <div className="commentsCont" key={comment.id}>
                               <CiTrash className="deleteicons" onClick={() => handleDeleteComment(post.id, comment.id)}/>
                               <h2 className="commentName">{comment.Name}</h2>
                               <p className="comments">{comment.text}</p>
-                           
+                              <p>Sentiment: {comment.sentiment}</p>
+                              <p>Confidence Score: {comment.score}</p>
                             
                           </div>
                         ))}
