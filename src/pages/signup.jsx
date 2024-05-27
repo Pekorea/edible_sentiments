@@ -94,7 +94,6 @@ function Signup(){
       <Header/>
        <div className='cont2'>
         <div className='Validation'>
-
         <form onSubmit={handleSubmit} className='Signform'>
         <h1 className='lognote'>SIGN UP</h1>
         <div className='contInts'>
@@ -113,7 +112,6 @@ function Signup(){
         <input required value={passKey} minLength={6} onChange={handlePassKeyChange} className='input' type='password'></input>
         {passKeyError && <h2 className="error">{passKeyError}</h2>}
         </div>
-        
         <span className="userType">
           <label>Select your user-Type</label>
           <div className="userTypeselection">
@@ -130,7 +128,6 @@ function Signup(){
           Customer
         </label>
         </div>
-        
         <div>
           <label>
           <input
@@ -145,10 +142,6 @@ function Signup(){
         </label>
         </div>
           </div>
-          
-        
-
-          
         </span>
         </div>
         <button className='regsub' type='submit' >
