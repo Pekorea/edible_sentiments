@@ -16,17 +16,17 @@ import {
   orderBy,
   increment,
 } from "firebase/firestore";
-import { db,imgDb } from "./firebase";
-import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db,imgDb} from "./firebase";
+import { ref, deleteObject, uploadBytesResumable, getDownloadURL, } from "firebase/storage";
 
 
-export async function addUser(userId, userType, name) { // Changed parameter name to userId for clarity
+export async function addUser(userId, userType, name) {
   try { 
     console.log(userId); 
-    const newUser = await addDoc(collection(db, "Users"), { // Use collection reference
+    const newUser = await addDoc(collection(db, "Users"), { 
       Name: name,
       created_at: new Date(),
-      userId: userId, // Use the passed userId directly
+      userId: userId, 
       userType: userType,
     });
     return newUser;
@@ -147,7 +147,7 @@ export async function fetchVendorPosts(vendorId) {
     const postsCollectionRef = collection(db, 'POST');
     const q = query(
       postsCollectionRef,
-      where('userId', '==', vendorId),
+      
       orderBy('created_at', 'desc')
     );
     const querySnapshot = await getDocs(q);
@@ -202,48 +202,49 @@ export async function fetchPosts(Id) {
   }
 }
 
-export const Commens= async (VendorId,PostId,comment)=>{
-  try{
-    if(!VendorId){
-      return console.error('You are not logged in')
+export const Commens = async (VendorId, PostId, comment) => {
+  try {
+    if (!VendorId) {
+      return console.error('You are not logged in');
     }
     console.log(VendorId)
     console.log(PostId)
     console.log(comment)
+
     const collectionRef = collection(db, "Users");
-    const querySnapshot = await getDocs(
-      query(collectionRef, where("userId", "==", VendorId))
-    );
+    const querySnapshot = await getDocs(query(collectionRef, where("userId", "==", VendorId)));
+    
     let userName = null;
     let userType = null;
     querySnapshot.forEach((doc) => {
-      
       const userData = doc.data();
       userName = userData.Name;
-      userType = userData.userType
+      userType = userData.userType;
     });
+
     if (!userName) {
       console.error('User not found');
       return;
     }
 
-    const newComment = await addDoc(collection(db, "POST",PostId,"comments"), { // Use collection reference
+    const newComment = await addDoc(collection(db, "POST", PostId, "comments"), {
       Name: userName,
-      text:comment,
+      text: comment,
       created_at: new Date(),
       userId: VendorId,
-      usertype: userType
+      usertype: userType,
     });
-    const changecomcount = await updateDoc(doc(db, "POST",PostId), { 
-      numcomments:increment(1)
+
+    await updateDoc(doc(db, "POST", PostId), {
+      numcomments: increment(1),
     });
+
     return newComment;
-    
-    
-  }catch(e){
-    console.error('This error occured: ', e)
+  } catch (e) {
+    console.error('This error occurred: ', e);
   }
-}
+};
+
 
 export const CommenT = async (VendorId, PostId, comment, sentiment, score) => {
   try {
@@ -313,18 +314,38 @@ export const fetchComments = async (PostId) => {
   }
 };
 
-export const deletePost = async (postId, imageUrl) => {
+export const deletePost = async (postId, imageUrl, userId) => {
   try {
+    console.log(postId);
+
+    // Fetch the post document from Firestore
+    const postDocRef = doc(db, 'POST', postId);
+    const postDoc = await getDoc(postDocRef);
+
+    if (!postDoc.exists()) {
+      throw new Error('Post not found');
+    }
+
+    const postData = postDoc.data();
+    const postCreatorId = postData.userId;
+    console.log(postCreatorId)
+
+    // Check if the current user is the creator of the post
+    if (postCreatorId !== userId) {
+      console.error('You cannot delete this post!');
+      return false;
+    }
+
     // Delete the post document from Firestore
-    await deleteDoc(doc(db, 'POST', postId));
-    
+    await deleteDoc(postDocRef);
+
     // Extract the filename from the imageUrl
     const imageName = imageUrl.split('/media%2F')[1].split('?')[0];
-    
+
     // Delete the image from Firebase Storage
     const imageRef = ref(imgDb, `media/${imageName}`);
     await deleteObject(imageRef);
-    
+
     return true;
   } catch (error) {
     console.error('Error deleting post: ', error);

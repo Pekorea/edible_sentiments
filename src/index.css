@@ -740,7 +740,7 @@ h2{
   gap:0.17rem;
   height: fit-content;
   padding:0.34rem;
-  background-color: rgb(91, 19, 91);
+  background-color: rgb(57, 13, 57);
   border-radius: 1rem;
   position: relative;
 
@@ -755,17 +755,52 @@ h2{
   display: flex;
   flex-direction: column;
   padding:0.3rem;
-  height:90%;
+  height:fit-content;
   overflow: auto;
   gap:1rem;
   position: relative;
-  background-color: black;
 
 }
 .deleteicons{
   position: absolute;
   top:0.6rem;
   right:0.4rem;
+}
+  /*LOADING*/
+  .loader-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    background-color: rgb(33, 9, 33);
+    z-index: 1;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid;
+    border-color: #6e27278e transparent #f7f7f7 transparent;
+    border-radius: 50%;
+    animation: spin-anim 1.2s linear infinite;
+}
+
+@keyframes spin-anim {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.sentresults_div{
+  display:flex;
+  flex-direction: column;
+  background-color: rgb(40, 38, 38);
+  padding:0.25rem;
+  font-size: 0.7rem;
 }
 }
 @media (max-width:760px) {
@@ -1474,7 +1509,7 @@ h2{
     gap:0.17rem;
     height: fit-content;
     padding:0.34rem;
-    background-color: rgb(91, 19, 91);
+    background-color: rgb(57, 13, 57);
     border-radius: 1rem;
     position: relative;
 
@@ -1489,16 +1524,50 @@ h2{
     display: flex;
     flex-direction: column;
     padding:0.3rem;
-    height:90%;
+    height:fit-content;
     overflow: auto;
     gap:1rem;
-    position: relative;
-    background-color: black;
 
   }
   .deleteicons{
     position: absolute;
     top:0.6rem;
     right:0.4rem;
+  }
+    /*LOADING*/
+    .loader-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      background-color: rgb(33, 9, 33);
+      z-index: 1;
+  }
+  
+  .spinner {
+      width: 64px;
+      height: 64px;
+      border: 8px solid;
+      border-color: #6e27278e transparent #f7f7f7 transparent;
+      border-radius: 50%;
+      animation: spin-anim 1.2s linear infinite;
+  }
+  
+  @keyframes spin-anim {
+      0% {
+          transform: rotate(0deg);
+      }
+      100% {
+          transform: rotate(360deg);
+      }
+  }
+  .sentresults_div{
+    display:flex;
+    flex-direction: column;
+    background-color: rgb(40, 38, 38);
+    padding:0.25rem;
+    font-size: 0.7rem;
   }
 }

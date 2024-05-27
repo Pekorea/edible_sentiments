@@ -12,15 +12,13 @@ import PostComponent from './pages/posttester'
 import AuthProvided from './lib/auth'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SentimentAnalyzer from './pages/sentimenttest'
+import PasswordReset from './pages/resetpasswor'
 const queryClient = new QueryClient();
 
 
 function App() {
   return(
 <div>
-
-    
-   
     <BrowserRouter>
        <Routes>
         <Route path="/">
@@ -43,6 +41,9 @@ function App() {
         </Route>
         <Route path="/sentmod">
         <Route index element={<SentimentAnalyzer/>} />
+        </Route>
+        <Route path="/restpass">
+        <Route index element={<PasswordReset/>} />
         </Route>
         </Routes>
   </BrowserRouter>

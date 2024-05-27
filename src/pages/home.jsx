@@ -5,7 +5,7 @@ import AuthProvided from "../lib/auth";
 import { AiOutlineSend } from "react-icons/ai";
 import Loading from "../components/loadingscn";
 import { toast, Toaster } from "react-hot-toast";
-import { fetchVendorPosts,deleteComment, deletePost, CommenT, fetchComments } from "../lib/helper"; // Adjust imports
+import { getNameandUT,fetchVendorPosts,deleteComment, deletePost, CommenT, fetchComments, Commens } from "../lib/helper"; // Adjust imports
 import { CiTrash } from "react-icons/ci";
 
 const SENTIMENT_ANALYSIS_URL = 'http://127.0.0.1:5000/analyze_sentiment';
@@ -16,6 +16,9 @@ function Home() {
   console.log(userId);
 
   const [isLoading, setLoading] = useState(true);
+  const [hide, sethide] = useState(true);
+  const [truecus, setTruecus] = useState(true);
+  const [userType, setUsertype] = useState('')
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState({});
   const [commentsInput, setCommentsInput] = useState({});
@@ -58,6 +61,28 @@ function Home() {
       fetchAllComments();
     }
   }, [posts]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userId) return null;
+
+      try {
+        console.log(userId)
+        setLoading(true);
+        const userData = await getNameandUT(userId);
+        if (userData) {
+          
+          setUsertype(userData.userType);
+          console.log(userType)
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
 
   const toggleComments = async (postId) => {
     const isVisible = commentsVisible[postId];
@@ -79,8 +104,14 @@ function Home() {
     }
   };
 
-  const handleDeleteComment = async (postId, commentId) => {
-    try {
+  const handleDeleteComment = async (postId, commentId,comid) => {
+    console.log(comid)
+    console.log(userId)
+    if(userId!==comid){
+      toast.error('Youre not the owner of the comment')
+      sethide(true)
+    }else{
+      try {
       await deleteComment(postId, commentId);
       setComments(prevState => ({
         ...prevState,
@@ -89,17 +120,21 @@ function Home() {
       toast.success('Comment deleted successfully!');
     } catch (error) {
       toast.error('Error deleting comment: ' + error.message);
-    }
+    }}
+    
   };
   const handleDelete = async (postId, imageUrl) => {
     try {
-      await deletePost(postId, imageUrl);
-      setPosts(posts.filter(post => post.id !== postId));
-      toast.success('Post deleted successfully!');
+      const success = await deletePost(postId, imageUrl, userId);
+      if (success) {
+        setPosts(posts.filter(post => post.id !== postId));
+        toast.success('Post deleted successfully!');
+      }
     } catch (error) {
       toast.error('Error deleting post: ' + error.message);
     }
   };
+  
 
   const formatDate = (date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -140,31 +175,62 @@ function Home() {
 
   const handlecomsub = async (VendorId, PostId, comment) => {
     try {
-      const sentimentData = await analyzeSentiment(comment);
-      if (sentimentData) {
-        await CommenT(VendorId, PostId, comment, sentimentData.label, sentimentData.score);
-        toast.success('Comment added successfully!');
-
+      // Check if user is a customer
+      if (userType !== 'vendor') {
+        try {
+          // Perform sentiment analysis
+          const sentimentData = await analyzeSentiment(comment);
+  
+          // Ensure sentiment analysis was successful
+          if (sentimentData) {
+            await CommenT(VendorId, PostId, comment, sentimentData.label, sentimentData.score);
+            toast.success('Customer comment added successfully with sentiment analysis!');
+  
+            // Clear the comment input
+            setCommentsInput((prevState) => ({
+              ...prevState,
+              [PostId]: '',
+            }));
+  
+            // Re-fetch comments after adding a new one
+            const updatedComments = await fetchComments(PostId);
+            setComments((prevState) => ({
+              ...prevState,
+              [PostId]: updatedComments,
+            }));
+          } else {
+            toast.error('Failed to analyze sentiment. Please try again.');
+            return; // Stop further execution if sentiment analysis fails
+          }
+        } catch (sentimentError) {
+          console.error('Sentiment analysis error:', sentimentError);
+          toast.error('Failed to analyze sentiment. Please try again.');
+          return; // Stop further execution if sentiment analysis fails
+        }
+      } else {
+        // Vendor comment: Add comment without sentiment analysis
+        await Commens(VendorId, PostId, comment);
+        toast.success('Vendor Comment added successfully!');
+  
         // Clear the comment input
         setCommentsInput((prevState) => ({
           ...prevState,
           [PostId]: '',
         }));
-
+  
         // Re-fetch comments after adding a new one
         const updatedComments = await fetchComments(PostId);
         setComments((prevState) => ({
           ...prevState,
           [PostId]: updatedComments,
         }));
-      } else {
-        toast.error('Failed to analyze sentiment. Please try again.');
       }
     } catch (e) {
-      console.error('error', e);
+      console.error('Error adding comment:', e);
       toast.error('Error adding comment: ' + e.message);
     }
   };
+  
 
   if (isLoading) return <Loading />;
 
@@ -213,11 +279,16 @@ function Home() {
                       <div className="yescom">
                         {comments[post.id] && comments[post.id].map((comment)=> (
                           <div className="commentsCont" key={comment.id}>
-                              <CiTrash className="deleteicons" onClick={() => handleDeleteComment(post.id, comment.id)}/>
+                              <CiTrash className="deleteicons" onClick={() => handleDeleteComment(post.id, comment.id, comment.userId)}/>
                               <h2 className="commentName">{comment.Name}</h2>
                               <p className="comments">{comment.text}</p>
-                              <p>Sentiment: {comment.sentiment}</p>
-                              <p>Confidence Score: {comment.score}</p>
+                              {truecus && comment.sentiment && comment.score ? (
+                                <div className="sentresults_div">
+                                <p>Sentiment: {comment.sentiment}</p>
+                                 <p>CS: {comment.score}</p>
+                                 </div>
+                               ) : null}
+
                             
                           </div>
                         ))}

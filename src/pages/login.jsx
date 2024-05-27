@@ -55,7 +55,7 @@ function Login() {
         <input value={passKey} onChange={changePasskey} required autoComplete="off" className='input' type='password'></input>
         </div>
         </div>
-        <Link to='#' className="fplink"><p >Forgotten Password</p></Link>
+        <Link to='/restpass' className="fplink"><p >Forgotten Password</p></Link>
         <button className='logsub' type='submit'>
         {loading ? "Loading..." : "VERIFY"}
         </button>

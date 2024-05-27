@@ -24,6 +24,14 @@ export default function AuthProvided() {
     }
   };
 
+  const resetpass = async (email)=>{
+      try {
+        await sendPasswordResetEmail(auth, email);
+        console.log('Password reset email sent!');
+      } catch (error) {
+        console.error(`Error: ${error.message}`);
+      }
+    }
   const signIn = async (email, password) => {
     try {
       const signInUser = await signInWithEmailAndPassword(

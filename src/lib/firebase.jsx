@@ -22,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const imgDb = getStorage(app)
 const auth = getAuth(app);
+
 export{db,imgDb, auth};
 
 
