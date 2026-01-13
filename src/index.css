@@ -815,6 +815,8 @@ h2{
   }
   .Ocont{
     padding:0px;
+    min-height: 100vh;
+    width: 100%;
     margin:0px;
     font-family:'Ubuntu Sans', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     background-image: url("/fimage2.jpg");
