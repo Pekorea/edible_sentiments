@@ -20,14 +20,32 @@ function App() {
   return(
 <div>
     <BrowserRouter>
-        <Route path="/" element={<Login />} />
-        <Route path="/posttester" element={<PostComponent />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/posts" element={<Posts />} />
-        <Route path="/sentmod" element={<SentimentAnalyzer />} />
-        <Route path="/restpass" element={<PasswordReset />} />
+       <Routes>
+        <Route path="/">
+        <Route index element={<Login/>} />
+        </Route>
+        <Route path="/posttester">
+        <Route index element={<PostComponent/>} />
+        </Route>
+        <Route path="/signup">
+        <Route index element={<Signup/>} />
+        </Route>
+        <Route path="/home">
+        <Route index element={<Home/>} />
+        </Route>
+        <Route path="/account">
+        <Route index element={<Account/>} />
+        </Route>
+        <Route path="/posts">
+        <Route index element={<Posts/>} />
+        </Route>
+        <Route path="/sentmod">
+        <Route index element={<SentimentAnalyzer/>} />
+        </Route>
+        <Route path="/restpass">
+        <Route index element={<PasswordReset/>} />
+        </Route>
+        </Routes>
   </BrowserRouter>
 
 </div>
